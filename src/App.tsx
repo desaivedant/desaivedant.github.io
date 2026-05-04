@@ -36,9 +36,9 @@ export default function App() {
             name: profile.name,
             jobTitle: profile.title,
             email: `mailto:${profile.email}`,
-            url: 'https://vedantdesai9.github.io/portfolio/',
+            url: 'https://vedantdesai.me/',
             sameAs: [
-              'https://github.com/vedantdesai9',
+              'https://github.com/desaivedant',
               'https://www.linkedin.com/in/vedantdesai9/',
               'https://x.com/vedantdesai_9',
             ],

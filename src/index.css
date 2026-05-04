@@ -16,16 +16,16 @@
 }
 
 :root.light {
-  --bg-primary: 250 250 252;
-  --bg-secondary: 240 240 245;
+  --bg-primary: 252 252 255;
+  --bg-secondary: 242 242 248;
   --surface: 255 255 255;
-  --text-primary: 18 18 26;
-  --text-secondary: 90 90 110;
-  --accent-1: 79 70 229;
-  --accent-2: 217 119 6;
-  --accent-glow: 99 102 241;
-  --success: 5 150 105;
-  --border-rgb: 220 220 230;
+  --text-primary: 15 15 25;
+  --text-secondary: 65 65 85;
+  --accent-1: 67 56 202;
+  --accent-2: 194 97 0;
+  --accent-glow: 79 70 229;
+  --success: 4 120 87;
+  --border-rgb: 200 200 215;
 }
 
 * {

@@ -1,6 +1,17 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useSyncExternalStore } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+
+function useIsLight() {
+  return useSyncExternalStore(
+    (cb) => {
+      const obs = new MutationObserver(cb);
+      obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      return () => obs.disconnect();
+    },
+    () => document.documentElement.classList.contains('light'),
+  );
+}
 
 /**
  * Persistent low-opacity background scene that lives behind the entire page.
@@ -30,6 +41,7 @@ function DriftShape({
   geometry,
 }: DriftShapeProps) {
   const meshRef = useRef<THREE.Mesh>(null);
+  const isLight = useIsLight();
 
   useFrame((state) => {
     if (!meshRef.current) return;
@@ -47,7 +59,7 @@ function DriftShape({
       {geometry === 'torus' && <torusGeometry args={[1, 0.3, 8, 24]} />}
       {geometry === 'octa' && <octahedronGeometry args={[1, 0]} />}
       {geometry === 'torusKnot' && <torusKnotGeometry args={[0.7, 0.2, 64, 8]} />}
-      <meshBasicMaterial color={color} wireframe transparent opacity={0.15} />
+      <meshBasicMaterial color={isLight ? '#3730a3' : color} wireframe transparent opacity={isLight ? 0.2 : 0.15} />
     </mesh>
   );
 }
@@ -70,6 +82,7 @@ function ParallaxGroup({ children }: { children: React.ReactNode }) {
 
 function StarField() {
   const pointsRef = useRef<THREE.Points>(null);
+  const isLight = useIsLight();
 
   const { positions, sizes } = useMemo(() => {
     const N = 280;
@@ -106,13 +119,13 @@ function StarField() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.025}
-        color="#818cf8"
+        size={isLight ? 0.035 : 0.025}
+        color={isLight ? '#4338ca' : '#818cf8'}
         transparent
-        opacity={0.5}
+        opacity={isLight ? 0.6 : 0.5}
         sizeAttenuation
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={isLight ? THREE.NormalBlending : THREE.AdditiveBlending}
       />
     </points>
   );

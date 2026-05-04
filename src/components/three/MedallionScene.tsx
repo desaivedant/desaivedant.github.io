@@ -1,6 +1,17 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useSyncExternalStore } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+
+function useIsLight() {
+  return useSyncExternalStore(
+    (cb) => {
+      const obs = new MutationObserver(cb);
+      obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      return () => obs.disconnect();
+    },
+    () => document.documentElement.classList.contains('light'),
+  );
+}
 
 /**
  * Medallion Architecture particle scene.
@@ -16,9 +27,9 @@ import * as THREE from 'three';
 const PARTICLE_COUNT = 1100;
 
 const ZONE = {
-  bronze: { x: -4.5, color: new THREE.Color('#b08968') },
-  silver: { x: -0.5, color: new THREE.Color('#c0c0c8') },
-  gold: { x: 3.0, color: new THREE.Color('#f59e0b') },
+  bronze: { x: -5.5, color: new THREE.Color('#b08968') },
+  silver: { x: -1.5, color: new THREE.Color('#c0c0c8') },
+  gold: { x: 2.0, color: new THREE.Color('#f59e0b') },
 };
 
 // AI core lives at the gold zone — this is where particles spiral in
@@ -32,6 +43,7 @@ const FIELD_DEPTH = 2.4;
 function ParticleField() {
   const pointsRef = useRef<THREE.Points>(null);
   const { mouse, viewport } = useThree();
+  const isLight = useIsLight();
 
   // Per-particle persistent state
   const state = useMemo(() => {
@@ -214,13 +226,13 @@ function ParticleField() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.045}
+        size={isLight ? 0.055 : 0.045}
         vertexColors
         transparent
-        opacity={0.85}
+        opacity={isLight ? 0.95 : 0.85}
         sizeAttenuation
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={isLight ? THREE.NormalBlending : THREE.AdditiveBlending}
       />
     </points>
   );
@@ -235,6 +247,7 @@ function AICore() {
   const coreRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
   const innerRef = useRef<THREE.Mesh>(null);
+  const isLight = useIsLight();
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -258,15 +271,15 @@ function AICore() {
       {/* Outer wireframe shell */}
       <mesh ref={coreRef}>
         <icosahedronGeometry args={[0.55, 1]} />
-        <meshBasicMaterial color="#f59e0b" wireframe transparent opacity={0.55} />
+        <meshBasicMaterial color={isLight ? '#b45309' : '#f59e0b'} wireframe transparent opacity={isLight ? 0.8 : 0.55} />
       </mesh>
       {/* Inner pulsing solid */}
       <mesh ref={innerRef}>
         <icosahedronGeometry args={[0.28, 0]} />
         <meshStandardMaterial
-          color="#f59e0b"
-          emissive="#f59e0b"
-          emissiveIntensity={1.6}
+          color={isLight ? '#b45309' : '#f59e0b'}
+          emissive={isLight ? '#b45309' : '#f59e0b'}
+          emissiveIntensity={isLight ? 0.8 : 1.6}
           wireframe
           transparent
           opacity={0.9}
@@ -275,7 +288,7 @@ function AICore() {
       {/* Orbiting ring — sized to match orbital radius */}
       <mesh ref={ringRef} rotation={[Math.PI / 2.4, 0, 0]}>
         <torusGeometry args={[1.3, 0.008, 6, 96]} />
-        <meshBasicMaterial color="#818cf8" transparent opacity={0.5} />
+        <meshBasicMaterial color={isLight ? '#4338ca' : '#818cf8'} transparent opacity={isLight ? 0.7 : 0.5} />
       </mesh>
     </group>
   );
@@ -285,7 +298,7 @@ export default function MedallionScene({ className }: { className?: string }) {
   return (
     <div className={className}>
       <Canvas
-        camera={{ position: [0, 0, 7], fov: 50 }}
+        camera={{ position: [-1.5, 0, 7], fov: 50 }}
         dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true }}
       >
