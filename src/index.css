@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: 10 10 15;
+  --bg-secondary: 18 18 26;
+  --surface: 26 26 37;
+  --text-primary: 232 232 240;
+  --text-secondary: 153 153 168;
+  --accent-1: 99 102 241;
+  --accent-2: 245 158 11;
+  --accent-glow: 129 140 248;
+  --success: 16 185 129;
+  --border-rgb: 38 38 56;
+}
+
+:root.light {
+  --bg-primary: 250 250 252;
+  --bg-secondary: 240 240 245;
+  --surface: 255 255 255;
+  --text-primary: 18 18 26;
+  --text-secondary: 90 90 110;
+  --accent-1: 79 70 229;
+  --accent-2: 217 119 6;
+  --accent-glow: 99 102 241;
+  --success: 5 150 105;
+  --border-rgb: 220 220 230;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(var(--bg-primary));
+  color: rgb(var(--text-primary));
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: rgb(var(--accent-1) / 0.4);
+  color: rgb(var(--text-primary));
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgb(var(--bg-primary));
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--border-rgb));
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--accent-1) / 0.6);
+}
+
+/* Hide cursor on touch devices for cleaner look */
+@media (hover: hover) and (pointer: fine) {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* Glow text utility */
+.text-glow {
+  text-shadow: 0 0 20px rgb(var(--accent-glow) / 0.6);
+}
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    rgb(var(--accent-1)) 0%,
+    rgb(var(--accent-2)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Subtle grid background */
+.bg-grid {
+  background-image:
+    linear-gradient(rgb(var(--border-rgb) / 0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--border-rgb) / 0.4) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+}
+
+/* Section spacing */
+.section {
+  padding-top: clamp(4rem, 10vh, 8rem);
+  padding-bottom: clamp(4rem, 10vh, 8rem);
+}
+
+.container-px {
+  padding-left: clamp(1rem, 5vw, 3rem);
+  padding-right: clamp(1rem, 5vw, 3rem);
+}

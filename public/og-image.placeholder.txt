@@ -1,0 +1,7 @@
+Replace this file with og-image.png (1200x630).
+
+Suggested generation:
+- Open the deployed site at /portfolio/
+- Take a 1200x630 screenshot of the hero with the Medallion scene
+- Save as public/og-image.png
+- Or use a tool like https://og-playground.vercel.app/ with title "Vedant Desai" and tagline "Engineering data today. Engineering intelligence tomorrow."
