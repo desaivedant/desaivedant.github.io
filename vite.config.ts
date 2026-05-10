@@ -4,7 +4,7 @@ import path from 'node:path';
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.CUSTOM_DOMAIN === 'true' ? '/' : '/portfolio/',
+  base: '/portfolio/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

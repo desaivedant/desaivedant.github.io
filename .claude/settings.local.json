@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm.cmd run *)"
+      "Bash(npm.cmd run *)",
+      "Bash(npx.cmd vite *)",
+      "Bash(curl -s http://localhost:5173/portfolio/)",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5174/portfolio/)"
     ]
   }
 }
